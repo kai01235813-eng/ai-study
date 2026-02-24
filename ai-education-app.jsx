@@ -141,194 +141,284 @@ const ScoreBadge = ({ score, total, t }) => {
   );
 };
 
-// ─── TAB 1: AI Concepts & History ─────────────────────
+// ─── TAB 1: AI History Timeline ───────────────────────
 const Tab1 = ({ onScore }) => {
   const t = T.concept;
-  const [expanded, setExpanded] = useState(new Set());
-  const [gameAnswers, setGameAnswers] = useState({});
-  const [gameSubmitted, setGameSubmitted] = useState(false);
+  const [activeEra, setActiveEra] = useState(null);
+  const [activeMilestone, setActiveMilestone] = useState(null);
 
-  const orgData = {
-    id: "ai", label: "AI 본부전체", role: "본부", icon: Brain, color: "#a78bfa",
-    desc: "인간의 지능을 모방하는 모든 기술의 총칭입니다. 규칙 기반 시스템부터 최신 생성형 AI까지, 사람처럼 생각하고 판단하는 모든 프로그램이 여기에 속합니다.",
-    example: "스팸 필터 · 자동 번역 · 음성 인식 · 자율주행",
-    children: [{
-      id: "ml", label: "머신러닝 팀", role: "팀", icon: TrendingUp, color: "#818cf8",
-      desc: "사람이 규칙을 짜주는 대신 데이터를 주고 '스스로 패턴을 찾아라!'라고 시키는 기술. 신입사원에게 과거 보고서를 주고 요령을 터득하게 하는 것과 같습니다.",
-      example: "전력 수요 예측 · 고장 탐지 · 고객 이탈 예측",
-      children: [{
-        id: "dl", label: "딥러닝 파트", role: "파트", icon: Network, color: "#60a5fa",
-        desc: "머신러닝의 엘리트 부대. 인간 뇌 신경망을 모방한 수백 층 네트워크로 복잡한 패턴을 학습합니다. 데이터가 많을수록 더 똑똑해집니다.",
-        example: "이미지 인식 · 음성 인식 · 자연어 처리",
-        children: [{
-          id: "genai", label: "생성형 AI (LLM)", role: "에이스", icon: Sparkles, color: "#f472b6",
-          desc: "딥러닝의 에이스! 기존 AI가 '분류·예측'에 그쳤다면, 생성형 AI는 글·그림·코드 등 새로운 콘텐츠를 '창작'합니다. ChatGPT, Claude가 여기에 해당합니다.",
-          example: "보고서 작성 · 코드 생성 · 이미지 생성 · 요약",
-          children: []
-        }]
-      }]
-    }]
-  };
+  // Quiz game state
+  const [qIndex, setQIndex] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [results, setResults] = useState([]);
+  const [gameOver, setGameOver] = useState(false);
 
-  const toggle = (id) => setExpanded(prev => {
-    const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n;
-  });
-
-  const OrgNode = ({ node, depth = 0 }) => {
-    const open = expanded.has(node.id);
-    const Icon = node.icon;
-    const hasKids = node.children?.length > 0;
-    const indent = depth * 20;
-    return (
-      <div style={{ marginLeft: indent }}>
-        <div
-          onClick={() => toggle(node.id)}
-          className="mb-2 rounded-xl cursor-pointer transition-all duration-300 overflow-hidden"
-          style={{
-            background: open ? `${node.color}14` : "rgba(255,255,255,0.03)",
-            border: `1px solid ${open ? node.color + "40" : "rgba(255,255,255,0.08)"}`,
-          }}
-        >
-          <div className="flex items-center gap-3 p-4">
-            {hasKids ? (
-              <div className="w-5 h-5 flex items-center justify-center transition-transform duration-300"
-                style={{ transform: open ? "rotate(90deg)" : "rotate(0)" }}>
-                <ChevronRight size={14} className="text-slate-500" />
-              </div>
-            ) : <div className="w-5" />}
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
-              style={{ background: node.color + "20", border: `1px solid ${node.color}40` }}>
-              <Icon size={16} style={{ color: node.color }} />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-bold text-white text-sm">{node.label}</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold"
-                  style={{ background: node.color + "20", color: node.color }}>{node.role}</span>
-              </div>
-            </div>
-          </div>
-          <div className={`overflow-hidden transition-all duration-500 ${open ? "max-h-40" : "max-h-0"}`}>
-            <div className="px-4 pb-4 pl-[60px]">
-              <p className="text-sm text-slate-300 leading-relaxed">{node.desc}</p>
-              <p className="text-xs text-slate-500 mt-1.5">예: {node.example}</p>
-            </div>
-          </div>
-        </div>
-        {hasKids && (
-          <div className={`overflow-hidden transition-all duration-500 ${open ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"}`}>
-            {node.children.map(c => <OrgNode key={c.id} node={c} depth={depth + 1} />)}
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  const tasks = [
-    { id: "t1", text: "정해진 규칙대로 스팸 메일을 자동 차단", answer: "program", emoji: "📧" },
-    { id: "t2", text: "과거 10년간 전력 수요 데이터로 내일 수요를 예측", answer: "ml", emoji: "📊" },
-    { id: "t3", text: "이번 폭염 대비 대국민 절전 안내문 초안 작성", answer: "genai", emoji: "✍️" },
-    { id: "t4", text: "송전탑 사진을 보고 결함 부위를 자동 탐지", answer: "ml", emoji: "🔍" },
-    { id: "t5", text: "IF-THEN 규칙으로 전압이 낮으면 알람 발생", answer: "program", emoji: "🚨" },
-    { id: "t6", text: "신입사원 교육 자료를 질의응답 챗봇으로 변환", answer: "genai", emoji: "💬" },
+  const eras = [
+    {
+      id: "rule", period: "1950–1980s", label: "규칙 기반 AI", emoji: "🧩",
+      color: "#a78bfa", desc: "사람이 모든 규칙을 직접 코딩. IF-THEN 논리로만 동작했습니다.",
+      milestones: [
+        { year: 1950, event: "튜링 테스트 제안", who: "앨런 튜링", desc: "'기계가 생각할 수 있는가?'를 판별하는 테스트 제안. AI의 씨앗이 뿌려지다.", icon: "🧠" },
+        { year: 1956, event: "AI 탄생 선언", who: "존 매카시", desc: "다트머스 회의에서 'Artificial Intelligence' 용어 최초 사용. AI라는 학문 분야 공식 탄생.", icon: "🎓" },
+        { year: 1966, event: "최초 챗봇 ELIZA 개발", who: "조지프 바이젠바움", desc: "규칙 기반으로 사람과 대화하는 최초의 챗봇. 하지만 규칙 이외의 상황엔 속수무책.", icon: "💬" },
+      ],
+    },
+    {
+      id: "ml", period: "1980s–2010s", label: "머신러닝 시대", emoji: "📊",
+      color: "#818cf8", desc: "데이터를 주면 AI가 스스로 패턴을 학습. 사람이 규칙을 짤 필요가 없어졌습니다.",
+      milestones: [
+        { year: 1989, event: "역전파 알고리즘 대중화", who: "제프리 힌튼", desc: "신경망 학습의 핵심 알고리즘이 실용화. 이후 딥러닝의 아버지로 불리게 됨.", icon: "⚙️" },
+        { year: 1997, event: "딥블루, 체스 챔피언 격파", who: "IBM", desc: "가리 카스파로프(세계 체스 챔피언)를 AI가 최초로 이김. 인류에게 큰 충격.", icon: "♟️" },
+        { year: 2006, event: "딥러닝 기반 연구 재점화", who: "제프리 힌튼 팀", desc: "오랜 'AI 겨울'을 끝내고 심층 신경망이 다시 주목받기 시작.", icon: "🔥" },
+      ],
+    },
+    {
+      id: "dl", period: "2010s", label: "딥러닝 혁명", emoji: "⚡",
+      color: "#60a5fa", desc: "수백 층의 인공 신경망으로 이미지·음성 인식에서 인간을 뛰어넘기 시작합니다.",
+      milestones: [
+        { year: 2012, event: "알렉스넷, 이미지 인식 혁명", who: "제프리 힌튼 팀", desc: "이미지 인식 대회 오류율을 절반으로 줄이며 딥러닝의 시대 개막. 업계 판도가 뒤집힘.", icon: "👁️" },
+        { year: 2016, event: "알파고, 이세돌 4:1 격파", who: "구글 딥마인드", desc: "복잡성이 무한에 가까운 바둑에서 AI가 세계 챔피언을 이김. 전 세계 충격.", icon: "⚫" },
+        { year: 2017, event: "트랜스포머 논문 발표", who: "구글 리서치", desc: "'Attention is All You Need' 논문으로 현재 모든 LLM의 기반이 되는 아키텍처 탄생.", icon: "🔬" },
+      ],
+    },
+    {
+      id: "genai", period: "2020s~", label: "생성형 AI 시대", emoji: "✨",
+      color: "#f472b6", desc: "글·그림·코드를 스스로 '창작'하는 AI. 지금 우리가 매일 사용하는 AI입니다.",
+      milestones: [
+        { year: 2020, event: "GPT-3 공개", who: "OpenAI", desc: "1,750억 파라미터의 초거대 언어모델 등장. 사람과 구분하기 어려운 글쓰기 능력 시연.", icon: "📝" },
+        { year: 2022, event: "ChatGPT 출시, AI 대중화", who: "OpenAI", desc: "출시 5일 만에 100만 사용자, 2개월에 1억 명 달성. AI가 일반인의 손으로.", icon: "🚀" },
+        { year: 2024, event: "AI 춘추전국시대", who: "Anthropic·Google·Meta 등", desc: "Claude, Gemini 등 다양한 AI가 등장. 멀티모달·에이전트 AI로 진화 중.", icon: "🌍" },
+      ],
+    },
   ];
 
-  const targets = [
-    { id: "program", label: "일반 프로그램", icon: Cpu, color: "#64748b" },
-    { id: "ml", label: "머신러닝 / 딥러닝", icon: Network, color: "#818cf8" },
-    { id: "genai", label: "생성형 AI", icon: Sparkles, color: "#f472b6" },
+  const activeEraData = eras.find(e => e.id === activeEra);
+
+  const selectMilestone = (eraId, msIdx) => {
+    const key = `${eraId}-${msIdx}`;
+    setActiveMilestone(prev => prev === key ? null : key);
+  };
+
+  // Quiz
+  const questions = [
+    { q: "바둑 세계 챔피언 이세돌을 이긴 AI의 이름은?", opts: ["딥블루", "AlexNet", "알파고", "GPT-3"], answer: 2, emoji: "⚫" },
+    { q: "'Artificial Intelligence'라는 단어가 처음 등장한 회의는?", opts: ["MIT 세미나 1954", "다트머스 회의 1956", "구글 I/O 2000", "NeurIPS 1987"], answer: 1, emoji: "🎓" },
+    { q: "현재 ChatGPT·Claude의 기반이 되는 핵심 아키텍처는?", opts: ["CNN", "RNN", "LSTM", "트랜스포머"], answer: 3, emoji: "🔬" },
+    { q: "ChatGPT가 100만 사용자를 달성하는 데 걸린 시간은?", opts: ["5일", "5주", "5개월", "5년"], answer: 0, emoji: "🚀" },
+    { q: "딥러닝이 이미지 인식 대회에서 처음 혁명적 성과를 낸 해는?", opts: ["2008년", "2010년", "2012년", "2016년"], answer: 2, emoji: "👁️" },
+    { q: "'Attention is All You Need' 논문을 발표한 곳은?", opts: ["OpenAI", "Meta AI", "구글 리서치", "딥마인드"], answer: 2, emoji: "📄" },
   ];
 
-  const score = gameSubmitted ? tasks.filter(t2 => gameAnswers[t2.id] === t2.answer).length : 0;
+  const handleAnswer = (optIdx) => {
+    if (selected !== null) return;
+    setSelected(optIdx);
+    const correct = optIdx === questions[qIndex].answer;
+    setTimeout(() => {
+      setResults(p => [...p, correct]);
+      if (qIndex + 1 >= questions.length) {
+        setGameOver(true);
+        const finalScore = [...results, correct].filter(Boolean).length;
+        onScore?.("concept", finalScore, questions.length);
+      } else {
+        setQIndex(p => p + 1);
+        setSelected(null);
+      }
+    }, 900);
+  };
 
-  useEffect(() => {
-    if (gameSubmitted) onScore?.("concept", score, tasks.length);
-  }, [gameSubmitted]);
+  const resetQuiz = () => { setQIndex(0); setSelected(null); setResults([]); setGameOver(false); };
+  const quizScore = results.filter(Boolean).length;
+  const curQ = questions[qIndex];
 
   return (
     <div className="space-y-6">
+      {/* ── 개념: 타임라인 ── */}
       <Card t={t}>
-        <SecHead icon={BookOpen} label="AI 조직도 — 클릭해서 펼쳐보기" t={t} />
-        <p className="text-sm text-slate-400 mb-6">각 항목을 클릭하면 설명과 하위 조직이 펼쳐집니다.</p>
-        <OrgNode node={orgData} />
+        <SecHead icon={BookOpen} label="AI 기술 발전사 — 시대별 타임라인" t={t} />
+        <p className="text-sm text-slate-400 mb-6">시대를 클릭해 주요 사건을 확인하세요.</p>
+
+        {/* Era selector */}
+        <div className="relative mb-6">
+          {/* 연결선 */}
+          <div className="absolute top-6 left-6 right-6 h-px hidden sm:block"
+            style={{ background: "linear-gradient(90deg, #a78bfa, #818cf8, #60a5fa, #f472b6)" }} />
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {eras.map((era) => {
+              const isActive = activeEra === era.id;
+              return (
+                <button key={era.id}
+                  onClick={() => { setActiveEra(isActive ? null : era.id); setActiveMilestone(null); }}
+                  className="relative flex flex-col items-center gap-2 p-4 rounded-xl transition-all duration-300 text-center"
+                  style={{
+                    background: isActive ? `${era.color}18` : "rgba(255,255,255,0.03)",
+                    border: `1px solid ${isActive ? era.color + "50" : "rgba(255,255,255,0.07)"}`,
+                    boxShadow: isActive ? `0 0 24px ${era.color}30` : "none",
+                    transform: isActive ? "translateY(-2px)" : "translateY(0)",
+                  }}>
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg z-10"
+                    style={{ background: isActive ? era.color : "rgba(255,255,255,0.06)", border: `2px solid ${isActive ? era.color : "rgba(255,255,255,0.1)"}`, boxShadow: isActive ? `0 0 16px ${era.color}60` : "none" }}>
+                    {era.emoji}
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold mb-0.5" style={{ color: isActive ? era.color : "#475569" }}>{era.period}</p>
+                    <p className="text-xs font-bold" style={{ color: isActive ? "white" : "#64748b" }}>{era.label}</p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Era detail */}
+        {activeEraData && (
+          <div style={{ animation: "fadeIn 0.3s ease-out" }}>
+            <div className="rounded-xl p-4 mb-4"
+              style={{ background: `${activeEraData.color}10`, border: `1px solid ${activeEraData.color}30` }}>
+              <p className="text-sm text-slate-300">{activeEraData.desc}</p>
+            </div>
+            <div className="space-y-2">
+              {activeEraData.milestones.map((ms, i) => {
+                const key = `${activeEraData.id}-${i}`;
+                const isOpen = activeMilestone === key;
+                return (
+                  <div key={i}
+                    onClick={() => selectMilestone(activeEraData.id, i)}
+                    className="rounded-xl overflow-hidden cursor-pointer transition-all duration-300"
+                    style={{
+                      background: isOpen ? `${activeEraData.color}10` : "rgba(255,255,255,0.03)",
+                      border: `1px solid ${isOpen ? activeEraData.color + "40" : "rgba(255,255,255,0.07)"}`,
+                    }}>
+                    <div className="flex items-center gap-3 p-4">
+                      <div className="w-12 text-center shrink-0">
+                        <span className="text-xs font-black font-mono" style={{ color: activeEraData.color }}>{ms.year}</span>
+                      </div>
+                      <div className="w-px h-8 shrink-0" style={{ background: activeEraData.color + "40" }} />
+                      <span className="text-lg shrink-0">{ms.icon}</span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-bold text-white">{ms.event}</p>
+                        <p className="text-xs text-slate-500">{ms.who}</p>
+                      </div>
+                      <ChevronRight size={14} className="text-slate-600 shrink-0 transition-transform duration-300"
+                        style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0)" }} />
+                    </div>
+                    <div className={`overflow-hidden transition-all duration-400 ${isOpen ? "max-h-24" : "max-h-0"}`}>
+                      <div className="px-4 pb-4 pl-[72px]">
+                        <p className="text-sm text-slate-300 leading-relaxed">{ms.desc}</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {!activeEra && (
+          <div className="text-center py-6 text-slate-600 text-sm">
+            위의 시대를 클릭해서 주요 사건을 살펴보세요 👆
+          </div>
+        )}
       </Card>
 
+      {/* ── 게임: AI 역사 퀴즈 ── */}
       <Card t={t} game>
-        <GameHead icon={Gamepad2} label="업무 분장 타이쿤" t={t} />
-        <p className="text-sm text-slate-400 mb-6">각 업무를 읽고 가장 적합한 AI 유형을 선택하세요!</p>
+        <GameHead icon={Gamepad2} label="AI 역사 퀴즈 — 얼마나 알고 있나요?" t={t} />
 
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          {targets.map(tg => (
-            <div key={tg.id} className="text-center p-3 rounded-xl"
-              style={{ background: tg.color + "12", border: `1px solid ${tg.color}30` }}>
-              <tg.icon size={20} className="mx-auto mb-1.5" style={{ color: tg.color }} />
-              <div className="text-xs font-bold text-white">{tg.label}</div>
-            </div>
-          ))}
-        </div>
-
-        <div className="space-y-3 mb-6">
-          {tasks.map(task => {
-            const sel = gameAnswers[task.id];
-            const isOk = gameSubmitted && sel === task.answer;
-            const isBad = gameSubmitted && sel && sel !== task.answer;
-            return (
-              <div key={task.id} className="rounded-xl p-4 transition-all duration-300"
-                style={{
-                  background: isOk ? "rgba(52,211,153,0.08)" : isBad ? "rgba(248,113,113,0.08)" : "rgba(255,255,255,0.03)",
-                  border: `1px solid ${isOk ? "rgba(52,211,153,0.3)" : isBad ? "rgba(248,113,113,0.3)" : "rgba(255,255,255,0.07)"}`,
-                }}>
-                <div className="flex items-start gap-3 mb-3">
-                  <span className="text-lg shrink-0">{task.emoji}</span>
-                  <p className="text-sm text-slate-200 flex-1">{task.text}</p>
-                  {gameSubmitted && (isOk
-                    ? <CheckCircle2 size={16} className="shrink-0 mt-0.5" style={{ color: "#34d399" }} />
-                    : isBad ? <XCircle size={16} className="shrink-0 mt-0.5" style={{ color: "#f87171" }} /> : null
-                  )}
-                </div>
-                <div className="flex gap-2">
-                  {targets.map(tg => (
-                    <button key={tg.id}
-                      onClick={() => { if (!gameSubmitted) setGameAnswers(p => ({ ...p, [task.id]: tg.id })); }}
-                      disabled={gameSubmitted}
-                      className="flex-1 text-xs py-2 px-2 rounded-lg font-semibold transition-all duration-200"
-                      style={{
-                        background: sel === tg.id ? tg.color : "rgba(255,255,255,0.04)",
-                        color: sel === tg.id ? "white" : "#94a3b8",
-                        border: `1px solid ${sel === tg.id ? tg.color : "rgba(255,255,255,0.08)"}`,
-                        boxShadow: sel === tg.id ? `0 0 12px ${tg.color}50` : "none",
-                      }}
-                    >
-                      {tg.label.split(" ")[0]}
-                    </button>
-                  ))}
-                </div>
-                {isBad && (
-                  <p className="text-xs mt-2 font-medium" style={{ color: "#f87171" }}>
-                    정답: {targets.find(tg => tg.id === task.answer)?.label}
-                  </p>
-                )}
+        {!gameOver ? (
+          <div className="space-y-5">
+            {/* Progress */}
+            <div className="flex items-center gap-3">
+              <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                <div className="h-full rounded-full transition-all duration-500"
+                  style={{ width: `${(qIndex / questions.length) * 100}%`, background: t.grad }} />
               </div>
-            );
-          })}
-        </div>
+              <span className="text-xs font-mono font-bold shrink-0" style={{ color: t.accent }}>
+                {qIndex + 1}/{questions.length}
+              </span>
+            </div>
 
-        <div className="flex items-center gap-3">
-          {!gameSubmitted ? (
-            <PBtn t={t} onClick={() => setGameSubmitted(true)}
-              disabled={Object.keys(gameAnswers).length < tasks.length}
-              icon={CheckCircle2}>
-              제출하기
-            </PBtn>
-          ) : (
-            <>
-              <ScoreBadge score={score} total={tasks.length} t={t} />
-              <GBtn onClick={() => { setGameAnswers({}); setGameSubmitted(false); }}>
-                <RotateCcw size={13} /> 다시 하기
+            {/* Score streak */}
+            <div className="flex gap-1.5">
+              {questions.map((_, i) => (
+                <div key={i} className="flex-1 h-1.5 rounded-full transition-all duration-300"
+                  style={{
+                    background: i < results.length
+                      ? (results[i] ? "#34d399" : "#f87171")
+                      : i === qIndex ? t.accent : "rgba(255,255,255,0.06)",
+                  }} />
+              ))}
+            </div>
+
+            {/* Question */}
+            <div className="rounded-xl p-5 text-center"
+              style={{ background: t.dim, border: `1px solid ${t.border}` }}>
+              <div className="text-3xl mb-3">{curQ.emoji}</div>
+              <p className="text-base font-bold text-white leading-snug">{curQ.q}</p>
+            </div>
+
+            {/* Options */}
+            <div className="grid grid-cols-2 gap-2">
+              {curQ.opts.map((opt, i) => {
+                const isSelected = selected === i;
+                const isCorrect = i === curQ.answer;
+                const showResult = selected !== null;
+                let bg = "rgba(255,255,255,0.04)";
+                let border = "rgba(255,255,255,0.08)";
+                let color = "#94a3b8";
+                let shadow = "none";
+                if (showResult) {
+                  if (isCorrect) { bg = "rgba(52,211,153,0.12)"; border = "rgba(52,211,153,0.4)"; color = "#34d399"; shadow = "0 0 16px rgba(52,211,153,0.2)"; }
+                  else if (isSelected) { bg = "rgba(248,113,113,0.12)"; border = "rgba(248,113,113,0.4)"; color = "#f87171"; }
+                } else if (isSelected) {
+                  bg = t.dim; border = t.border; color = t.accent; shadow = `0 0 12px ${t.glow}`;
+                }
+                return (
+                  <button key={i}
+                    onClick={() => handleAnswer(i)}
+                    disabled={selected !== null}
+                    className="p-3 rounded-xl text-sm font-semibold text-left transition-all duration-200"
+                    style={{ background: bg, border: `1px solid ${border}`, color, boxShadow: shadow }}>
+                    <span className="font-mono text-xs mr-2 opacity-50">{String.fromCharCode(65 + i)}.</span>
+                    {opt}
+                    {showResult && isCorrect && <CheckCircle2 size={13} className="inline ml-1.5" />}
+                    {showResult && isSelected && !isCorrect && <XCircle size={13} className="inline ml-1.5" />}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-5" style={{ animation: "fadeIn 0.4s ease-out" }}>
+            <div className="p-6 rounded-xl text-center"
+              style={{
+                background: quizScore >= 5 ? "rgba(52,211,153,0.08)" : quizScore >= 3 ? "rgba(251,191,36,0.08)" : "rgba(248,113,113,0.08)",
+                border: `1px solid ${quizScore >= 5 ? "rgba(52,211,153,0.3)" : quizScore >= 3 ? "rgba(251,191,36,0.3)" : "rgba(248,113,113,0.3)"}`,
+              }}>
+              {quizScore === questions.length && <Trophy size={32} style={{ color: "#34d399" }} className="mx-auto mb-3" />}
+              <div className="text-5xl font-black text-white mb-1">
+                {quizScore}<span className="text-2xl text-slate-500">/{questions.length}</span>
+              </div>
+              <p className="font-bold text-lg mb-1" style={{ color: quizScore >= 5 ? "#34d399" : quizScore >= 3 ? "#fbbf24" : "#f87171" }}>
+                {quizScore === questions.length ? "🏆 AI 역사 전문가!" : quizScore >= 4 ? "🎉 훌륭해요!" : quizScore >= 3 ? "👍 잘 했어요!" : "📚 타임라인을 다시 보세요!"}
+              </p>
+              {/* Answer review */}
+              <div className="flex justify-center gap-2 mt-3">
+                {results.map((r, i) => (
+                  <div key={i} className="w-7 h-7 rounded-full flex items-center justify-center"
+                    style={{ background: r ? "rgba(52,211,153,0.2)" : "rgba(248,113,113,0.2)" }}>
+                    {r ? <CheckCircle2 size={13} style={{ color: "#34d399" }} /> : <XCircle size={13} style={{ color: "#f87171" }} />}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <GBtn onClick={resetQuiz}><RotateCcw size={13} />다시 풀기</GBtn>
+              <GBtn onClick={() => setActiveEra("rule")}>
+                <BookOpen size={13} />타임라인 복습
               </GBtn>
-            </>
-          )}
-        </div>
+            </div>
+          </div>
+        )}
       </Card>
     </div>
   );

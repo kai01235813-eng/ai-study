@@ -141,9 +141,10 @@ const ScoreBadge = ({ score, total, t }) => {
   );
 };
 
-// ─── TAB 1: AI History Timeline ───────────────────────
+// ─── TAB 1: AI Concepts & History ─────────────────────
 const Tab1 = ({ onScore }) => {
   const t = T.concept;
+  const [openConcept, setOpenConcept] = useState(null);
   const [activeEra, setActiveEra] = useState(null);
   const [activeMilestone, setActiveMilestone] = useState(null);
 
@@ -152,6 +153,64 @@ const Tab1 = ({ onScore }) => {
   const [selected, setSelected] = useState(null);
   const [results, setResults] = useState([]);
   const [gameOver, setGameOver] = useState(false);
+
+  // ── 개념 데이터 ──
+  const concepts = [
+    {
+      id: "algo", num: "01", name: "알고리즘", emoji: "📋", tag: "기초", tagColor: "#64748b",
+      tagline: "문제를 푸는 단계별 레시피",
+      desc: "컴퓨터가 문제를 어떻게 풀지 정해놓은 순서와 규칙의 집합입니다. 라면 끓이는 조리법처럼, 단계를 순서대로 따라가면 원하는 결과가 나옵니다. 모든 AI 기술의 가장 기초가 됩니다.",
+      example: "신호등이 빨간색이면 멈추고, 초록색이면 가라 → IF-THEN 알고리즘",
+    },
+    {
+      id: "prog", num: "02", name: "프로그램 (규칙 기반 AI)", emoji: "🖥️", tag: "기초", tagColor: "#64748b",
+      tagline: "사람이 모든 규칙을 직접 코드로 작성",
+      desc: "알고리즘을 코드로 구현한 것입니다. 초기 AI는 사람이 모든 규칙을 직접 작성했습니다. 빠르고 정확하지만, 예상 밖의 상황이 오면 속수무책입니다. 유연성이 없는 것이 가장 큰 한계입니다.",
+      example: "스팸 필터 (특정 단어가 있으면 차단), 계산기, 신호등 제어 시스템",
+    },
+    {
+      id: "ml", num: "03", name: "머신러닝 (ML)", emoji: "📊", tag: "핵심", tagColor: "#818cf8",
+      tagline: "데이터를 주면 스스로 패턴을 찾는 AI",
+      desc: "사람이 규칙을 짜는 대신, 수많은 데이터를 보여주면 AI가 스스로 패턴을 학습합니다. 신입사원에게 수천 개의 과거 보고서를 주고 요령을 터득하게 하는 것과 같습니다. 데이터 품질이 성능을 결정합니다.",
+      example: "전력 수요 예측, 고장 설비 탐지, 스팸 자동 분류, 영화 추천",
+    },
+    {
+      id: "dl", num: "04", name: "딥러닝 (DL)", emoji: "🧠", tag: "핵심", tagColor: "#60a5fa",
+      tagline: "뇌 신경망을 모방한 고급 머신러닝",
+      desc: "머신러닝의 진화형입니다. 인간 뇌의 뉴런 연결을 모방해 수십~수백 층의 레이어로 복잡한 패턴을 스스로 학습합니다. 데이터와 컴퓨팅 파워가 많을수록 강력해지며, 이미지·음성 인식에서 인간을 능가합니다.",
+      example: "얼굴 인식, 자율주행, 음성 비서(Siri·Bixby), 번역기",
+    },
+    {
+      id: "ai", num: "05", name: "AI (인공지능)", emoji: "🤖", tag: "개념", tagColor: "#a78bfa",
+      tagline: "인간의 지능을 모방하는 모든 기술의 총칭",
+      desc: "알고리즘부터 머신러닝, 딥러닝, 생성형 AI까지 모두 포함하는 가장 넓은 개념입니다. '사람처럼 생각하고 판단하고 학습하는 모든 컴퓨터 프로그램'이 AI입니다. 좁은 AI(특정 작업)와 넓은 AI(범용)로 구분합니다.",
+      example: "시리, 알렉사, 자율주행차, 바둑 AI, ChatGPT 모두 AI",
+    },
+    {
+      id: "llm", num: "06", name: "LLM (대형 언어 모델)", emoji: "💬", tag: "최신", tagColor: "#34d399",
+      tagline: "수천억 단어를 학습한 언어 전문가 AI",
+      desc: "Large Language Model. 인터넷의 방대한 텍스트를 학습해 사람처럼 글을 읽고 씁니다. 트랜스포머 아키텍처 기반이며, 파라미터(신경망 가중치) 수가 많을수록 더 지능적입니다. 현재 AI 붐의 핵심 기술입니다.",
+      example: "GPT-4(OpenAI), Claude(Anthropic), Gemini(Google), Llama(Meta)",
+    },
+    {
+      id: "agent", num: "07", name: "AI 에이전트 (Agent)", emoji: "🦾", tag: "최신", tagColor: "#fb923c",
+      tagline: "목표를 주면 스스로 계획하고 행동하는 AI",
+      desc: "단순히 질문에 답하는 것을 넘어, 도구(검색·코드실행·파일조작·API호출)를 사용하며 여러 단계를 스스로 계획해 임무를 완수합니다. LLM에 '손발'이 생긴 것입니다. 복잡한 업무 자동화가 가능합니다.",
+      example: "리서치 에이전트(자동 조사·정리), 코딩 에이전트, 이메일 자동 처리 AI",
+    },
+    {
+      id: "agi", num: "08", name: "AGI (범용 인공지능)", emoji: "🌐", tag: "미래", tagColor: "#fbbf24",
+      tagline: "인간과 동등하게 모든 분야를 수행하는 AI",
+      desc: "Artificial General Intelligence. 현재 AI는 특정 분야만 잘하는 '좁은 AI'입니다. AGI는 인간처럼 어떤 지적 과제든 수행하며 새로운 분야도 스스로 학습합니다. 아직 달성되지 않았으며 2030년대를 목표로 연구 중입니다.",
+      example: "의사·변호사·과학자 역할을 동시에, 새로운 분야도 혼자 터득",
+    },
+    {
+      id: "asi", num: "09", name: "ASI (초인공지능)", emoji: "🚀", tag: "미래", tagColor: "#f87171",
+      tagline: "모든 면에서 인간을 초월하는 AI",
+      desc: "Artificial Super Intelligence. AGI를 넘어 창의성·감성·과학적 발견 등 모든 분야에서 최고의 인간 전문가를 압도하는 수준의 AI입니다. SF영화의 AI가 여기에 해당합니다. 달성 시 인류에 미치는 영향은 예측 불가능합니다.",
+      example: "아직 존재하지 않음 — 이론적 개념 (닉 보스트롬의 '수퍼인텔리전스' 참고)",
+    },
+  ];
 
   const eras = [
     {
@@ -199,14 +258,20 @@ const Tab1 = ({ onScore }) => {
     setActiveMilestone(prev => prev === key ? null : key);
   };
 
-  // Quiz
+  // Quiz (개념 + 역사 혼합)
   const questions = [
+    { q: "사람이 모든 규칙을 직접 코드로 작성하는 방식의 AI는?", opts: ["머신러닝", "딥러닝", "규칙 기반 AI", "LLM"], answer: 2, emoji: "🖥️" },
+    { q: "데이터를 주면 스스로 패턴을 찾아 학습하는 AI 기술은?", opts: ["알고리즘", "머신러닝", "AGI", "AI 에이전트"], answer: 1, emoji: "📊" },
+    { q: "인간 뇌의 뉴런 연결을 모방해 만든 AI 기술은?", opts: ["규칙 기반 AI", "머신러닝", "딥러닝", "프로그램"], answer: 2, emoji: "🧠" },
+    { q: "GPT-4, Claude, Gemini가 해당하는 AI 유형은?", opts: ["AGI", "알고리즘", "규칙 기반 AI", "LLM"], answer: 3, emoji: "💬" },
+    { q: "목표를 주면 도구를 사용해 스스로 계획·실행하는 AI는?", opts: ["LLM", "AI 에이전트", "딥러닝", "머신러닝"], answer: 1, emoji: "🦾" },
+    { q: "인간과 동등하게 모든 분야를 수행하는 AI의 이름은?", opts: ["ASI", "AGI", "LLM", "AI 에이전트"], answer: 1, emoji: "🌐" },
+    { q: "모든 면에서 인간을 초월하는 이론적 AI 개념은?", opts: ["AGI", "GPT-4", "ASI", "딥러닝"], answer: 2, emoji: "🚀" },
     { q: "바둑 세계 챔피언 이세돌을 이긴 AI의 이름은?", opts: ["딥블루", "AlexNet", "알파고", "GPT-3"], answer: 2, emoji: "⚫" },
-    { q: "'Artificial Intelligence'라는 단어가 처음 등장한 회의는?", opts: ["MIT 세미나 1954", "다트머스 회의 1956", "구글 I/O 2000", "NeurIPS 1987"], answer: 1, emoji: "🎓" },
     { q: "현재 ChatGPT·Claude의 기반이 되는 핵심 아키텍처는?", opts: ["CNN", "RNN", "LSTM", "트랜스포머"], answer: 3, emoji: "🔬" },
     { q: "ChatGPT가 100만 사용자를 달성하는 데 걸린 시간은?", opts: ["5일", "5주", "5개월", "5년"], answer: 0, emoji: "🚀" },
     { q: "딥러닝이 이미지 인식 대회에서 처음 혁명적 성과를 낸 해는?", opts: ["2008년", "2010년", "2012년", "2016년"], answer: 2, emoji: "👁️" },
-    { q: "'Attention is All You Need' 논문을 발표한 곳은?", opts: ["OpenAI", "Meta AI", "구글 리서치", "딥마인드"], answer: 2, emoji: "📄" },
+    { q: "'Artificial Intelligence'라는 단어가 처음 등장한 회의는?", opts: ["MIT 세미나", "다트머스 회의 1956", "구글 I/O 2000", "NeurIPS 1987"], answer: 1, emoji: "🎓" },
   ];
 
   const handleAnswer = (optIdx) => {
@@ -232,9 +297,76 @@ const Tab1 = ({ onScore }) => {
 
   return (
     <div className="space-y-6">
-      {/* ── 개념: 타임라인 ── */}
+      {/* ── Card 1: AI 주요 개념 설명 ── */}
       <Card t={t}>
-        <SecHead icon={BookOpen} label="AI 기술 발전사 — 시대별 타임라인" t={t} />
+        <SecHead icon={Brain} label="AI 주요 개념 설명 — 기초부터 미래까지" t={t} />
+        <p className="text-sm text-slate-400 mb-5">각 항목을 클릭하면 쉬운 설명과 예시를 볼 수 있습니다.</p>
+
+        {/* 스펙트럼 바 */}
+        <div className="flex items-center gap-1 mb-5 text-[10px] font-bold">
+          {["기초", "기초", "핵심", "핵심", "개념", "최신", "최신", "미래", "미래"].map((tag, i) => {
+            const colors = { 기초: "#64748b", 핵심: "#818cf8", 개념: "#a78bfa", 최신: "#34d399", 미래: "#f87171" };
+            return (
+              <div key={i} className="flex-1 h-1.5 rounded-full" style={{ background: colors[tag] }} />
+            );
+          })}
+        </div>
+        <div className="flex justify-between text-[10px] font-semibold text-slate-600 mb-5 -mt-2">
+          <span>기초 기술</span><span>최신 AI</span><span>미래 개념</span>
+        </div>
+
+        <div className="space-y-1.5">
+          {concepts.map((c) => {
+            const isOpen = openConcept === c.id;
+            return (
+              <div key={c.id}
+                onClick={() => setOpenConcept(isOpen ? null : c.id)}
+                className="rounded-xl overflow-hidden cursor-pointer transition-all duration-300"
+                style={{
+                  background: isOpen ? `${c.tagColor}10` : "rgba(255,255,255,0.03)",
+                  border: `1px solid ${isOpen ? c.tagColor + "40" : "rgba(255,255,255,0.07)"}`,
+                }}>
+                <div className="flex items-center gap-3 p-3.5">
+                  {/* 번호 */}
+                  <span className="text-[10px] font-black font-mono w-6 shrink-0 text-center"
+                    style={{ color: c.tagColor }}>{c.num}</span>
+                  {/* 이모지 */}
+                  <span className="text-lg shrink-0">{c.emoji}</span>
+                  {/* 이름 + 태그라인 */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-sm font-bold text-white">{c.name}</span>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                        style={{ background: c.tagColor + "20", color: c.tagColor }}>{c.tag}</span>
+                    </div>
+                    {!isOpen && (
+                      <p className="text-xs text-slate-500 mt-0.5 truncate">{c.tagline}</p>
+                    )}
+                  </div>
+                  {/* 화살표 */}
+                  <ChevronRight size={14} className="text-slate-600 shrink-0 transition-transform duration-300"
+                    style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0)" }} />
+                </div>
+                {/* 펼쳐진 내용 */}
+                <div className={`overflow-hidden transition-all duration-400 ${isOpen ? "max-h-60" : "max-h-0"}`}>
+                  <div className="px-4 pb-4 pl-[60px] space-y-2" style={{ animation: isOpen ? "fadeIn 0.3s ease-out" : "" }}>
+                    <p className="text-xs font-bold mb-1" style={{ color: c.tagColor }}>"{c.tagline}"</p>
+                    <p className="text-sm text-slate-300 leading-relaxed">{c.desc}</p>
+                    <div className="rounded-lg p-2.5 mt-2" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
+                      <p className="text-[10px] font-bold text-slate-500 mb-1">💡 실제 예시</p>
+                      <p className="text-xs text-slate-400">{c.example}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </Card>
+
+      {/* ── Card 2: AI 기술 역사 (기존 타임라인, 이동) ── */}
+      <Card t={t}>
+        <SecHead icon={BookOpen} label="AI 기술 역사 — 시대별 타임라인" t={t} />
         <p className="text-sm text-slate-400 mb-6">시대를 클릭해 주요 사건을 확인하세요.</p>
 
         {/* Era selector */}
@@ -322,7 +454,7 @@ const Tab1 = ({ onScore }) => {
 
       {/* ── 게임: AI 역사 퀴즈 ── */}
       <Card t={t} game>
-        <GameHead icon={Gamepad2} label="AI 역사 퀴즈 — 얼마나 알고 있나요?" t={t} />
+        <GameHead icon={Gamepad2} label="AI 개념 & 역사 퀴즈 — 12문제 도전!" t={t} />
 
         {!gameOver ? (
           <div className="space-y-5">
@@ -398,8 +530,8 @@ const Tab1 = ({ onScore }) => {
               <div className="text-5xl font-black text-white mb-1">
                 {quizScore}<span className="text-2xl text-slate-500">/{questions.length}</span>
               </div>
-              <p className="font-bold text-lg mb-1" style={{ color: quizScore >= 5 ? "#34d399" : quizScore >= 3 ? "#fbbf24" : "#f87171" }}>
-                {quizScore === questions.length ? "🏆 AI 역사 전문가!" : quizScore >= 4 ? "🎉 훌륭해요!" : quizScore >= 3 ? "👍 잘 했어요!" : "📚 타임라인을 다시 보세요!"}
+              <p className="font-bold text-lg mb-1" style={{ color: quizScore >= 10 ? "#34d399" : quizScore >= 7 ? "#fbbf24" : "#f87171" }}>
+                {quizScore === questions.length ? "🏆 AI 전문가 인증!" : quizScore >= 10 ? "🎉 훌륭해요!" : quizScore >= 7 ? "👍 잘 했어요!" : "📚 개념 카드를 다시 보세요!"}
               </p>
               {/* Answer review */}
               <div className="flex justify-center gap-2 mt-3">
@@ -413,8 +545,8 @@ const Tab1 = ({ onScore }) => {
             </div>
             <div className="flex gap-3">
               <GBtn onClick={resetQuiz}><RotateCcw size={13} />다시 풀기</GBtn>
-              <GBtn onClick={() => setActiveEra("rule")}>
-                <BookOpen size={13} />타임라인 복습
+              <GBtn onClick={() => setOpenConcept("algo")}>
+                <BookOpen size={13} />개념 복습
               </GBtn>
             </div>
           </div>

@@ -12,34 +12,34 @@ import {
 // ─── Design Tokens ────────────────────────────────────
 const T = {
   concept: {
-    accent: "#a78bfa", dim: "rgba(167,139,250,0.12)",
-    border: "rgba(167,139,250,0.28)",
+    accent: "#7c3aed", dim: "rgba(124,58,237,0.08)",
+    border: "rgba(124,58,237,0.2)",
     grad: "linear-gradient(135deg,#6d28d9,#a78bfa)",
-    glow: "rgba(167,139,250,0.4)",
+    glow: "rgba(124,58,237,0.2)",
   },
   how: {
-    accent: "#38bdf8", dim: "rgba(56,189,248,0.12)",
-    border: "rgba(56,189,248,0.28)",
+    accent: "#0284c7", dim: "rgba(2,132,199,0.08)",
+    border: "rgba(2,132,199,0.2)",
     grad: "linear-gradient(135deg,#0369a1,#38bdf8)",
-    glow: "rgba(56,189,248,0.4)",
+    glow: "rgba(2,132,199,0.2)",
   },
   apply: {
-    accent: "#fb923c", dim: "rgba(251,146,60,0.12)",
-    border: "rgba(251,146,60,0.28)",
+    accent: "#ea580c", dim: "rgba(234,88,12,0.08)",
+    border: "rgba(234,88,12,0.2)",
     grad: "linear-gradient(135deg,#c2410c,#fb923c)",
-    glow: "rgba(251,146,60,0.4)",
+    glow: "rgba(234,88,12,0.2)",
   },
   prompt: {
-    accent: "#34d399", dim: "rgba(52,211,153,0.12)",
-    border: "rgba(52,211,153,0.28)",
+    accent: "#059669", dim: "rgba(5,150,105,0.08)",
+    border: "rgba(5,150,105,0.2)",
     grad: "linear-gradient(135deg,#047857,#34d399)",
-    glow: "rgba(52,211,153,0.4)",
+    glow: "rgba(5,150,105,0.2)",
   },
   ethics: {
-    accent: "#f87171", dim: "rgba(248,113,113,0.12)",
-    border: "rgba(248,113,113,0.28)",
+    accent: "#dc2626", dim: "rgba(220,38,38,0.08)",
+    border: "rgba(220,38,38,0.2)",
     grad: "linear-gradient(135deg,#b91c1c,#f87171)",
-    glow: "rgba(248,113,113,0.4)",
+    glow: "rgba(220,38,38,0.2)",
   },
 };
 
@@ -48,11 +48,11 @@ const Card = ({ children, t, game = false, className = "" }) => (
   <div
     className={`rounded-2xl overflow-hidden ${className}`}
     style={{
-      background: "rgba(13,21,37,0.95)",
-      border: `1px solid ${game && t ? t.border : "rgba(255,255,255,0.07)"}`,
+      background: "#ffffff",
+      border: `1px solid ${game && t ? t.border : "rgba(0,0,0,0.07)"}`,
       boxShadow: game && t
-        ? `0 0 60px ${t.glow}, 0 4px 32px rgba(0,0,0,0.5)`
-        : "0 4px 32px rgba(0,0,0,0.4)",
+        ? `0 4px 24px ${t.glow}, 0 1px 4px rgba(0,0,0,0.06)`
+        : "0 2px 16px rgba(0,0,0,0.07)",
     }}
   >
     {game && t && <div className="h-[3px]" style={{ background: t.grad }} />}
@@ -69,7 +69,7 @@ const SecHead = ({ icon: Icon, label, t }) => (
     <div>
       <p className="text-[10px] font-black tracking-[0.2em] uppercase mb-0.5"
         style={{ color: t.accent }}>CONCEPT</p>
-      <h3 className="text-base font-bold text-white">{label}</h3>
+      <h3 className="text-base font-bold text-slate-800">{label}</h3>
     </div>
   </div>
 );
@@ -77,13 +77,13 @@ const SecHead = ({ icon: Icon, label, t }) => (
 const GameHead = ({ icon: Icon, label, t }) => (
   <div className="flex items-center gap-3 mb-6">
     <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-      style={{ background: t.grad, boxShadow: `0 4px 16px ${t.glow}` }}>
+      style={{ background: t.grad, boxShadow: `0 4px 12px ${t.glow}` }}>
       <Icon size={18} className="text-white" />
     </div>
     <div className="flex-1">
       <p className="text-[10px] font-black tracking-[0.2em] uppercase mb-0.5"
         style={{ color: t.accent }}>INTERACTIVE GAME</p>
-      <h3 className="text-base font-bold text-white">{label}</h3>
+      <h3 className="text-base font-bold text-slate-800">{label}</h3>
     </div>
     <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
       style={{ background: t.dim, border: `1px solid ${t.border}` }}>
@@ -97,13 +97,13 @@ const PBtn = ({ children, onClick, disabled, t, className = "", icon: Icon }) =>
   <button
     onClick={onClick}
     disabled={disabled}
-    className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed ${className}`}
+    className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed ${className}`}
     style={{
-      background: disabled ? "rgba(55,65,81,0.5)" : t.grad,
-      boxShadow: disabled ? "none" : `0 4px 20px ${t.glow}`,
+      background: disabled ? "#cbd5e1" : t.grad,
+      boxShadow: disabled ? "none" : `0 4px 16px ${t.glow}`,
     }}
-    onMouseEnter={e => { if (!disabled) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 30px ${t.glow}`; } }}
-    onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = disabled ? "none" : `0 4px 20px ${t.glow}`; }}
+    onMouseEnter={e => { if (!disabled) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${t.glow}`; } }}
+    onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = disabled ? "none" : `0 4px 16px ${t.glow}`; }}
   >
     {Icon && <Icon size={15} />}{children}
   </button>
@@ -112,10 +112,10 @@ const PBtn = ({ children, onClick, disabled, t, className = "", icon: Icon }) =>
 const GBtn = ({ children, onClick, className = "" }) => (
   <button
     onClick={onClick}
-    className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-slate-400 hover:text-white transition-all duration-200 ${className}`}
-    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
-    onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)"; }}
-    onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; }}
+    className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-slate-500 hover:text-slate-800 transition-all duration-200 ${className}`}
+    style={{ background: "#f8fafc", border: "1px solid rgba(0,0,0,0.09)" }}
+    onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(0,0,0,0.04)"; e.currentTarget.style.background = "#f1f5f9"; }}
+    onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(0,0,0,0.09)"; e.currentTarget.style.background = "#f8fafc"; }}
   >
     {children}
   </button>
@@ -125,10 +125,10 @@ const ScoreBadge = ({ score, total, t }) => {
   const pct = Math.round((score / total) * 100);
   const variant = pct === 100 ? "perfect" : pct >= 70 ? "good" : pct >= 50 ? "ok" : "low";
   const colors = {
-    perfect: { bg: "rgba(52,211,153,0.15)", border: "rgba(52,211,153,0.4)", text: "#34d399" },
-    good: { bg: "rgba(251,191,36,0.15)", border: "rgba(251,191,36,0.4)", text: "#fbbf24" },
-    ok: { bg: "rgba(251,146,60,0.15)", border: "rgba(251,146,60,0.4)", text: "#fb923c" },
-    low: { bg: "rgba(248,113,113,0.15)", border: "rgba(248,113,113,0.4)", text: "#f87171" },
+    perfect: { bg: "rgba(5,150,105,0.1)", border: "rgba(5,150,105,0.3)", text: "#059669" },
+    good: { bg: "rgba(217,119,6,0.1)", border: "rgba(217,119,6,0.3)", text: "#d97706" },
+    ok: { bg: "rgba(234,88,12,0.1)", border: "rgba(234,88,12,0.3)", text: "#ea580c" },
+    low: { bg: "rgba(220,38,38,0.1)", border: "rgba(220,38,38,0.3)", text: "#dc2626" },
   };
   const c = colors[variant];
   return (
@@ -300,7 +300,7 @@ const Tab1 = ({ onScore }) => {
       {/* ── Card 1: AI 주요 개념 설명 ── */}
       <Card t={t}>
         <SecHead icon={Brain} label="AI 주요 개념 설명 — 기초부터 미래까지" t={t} />
-        <p className="text-sm text-slate-400 mb-5">각 항목을 클릭하면 쉬운 설명과 예시를 볼 수 있습니다.</p>
+        <p className="text-sm text-slate-500 mb-5">각 항목을 클릭하면 쉬운 설명과 예시를 볼 수 있습니다.</p>
 
         {/* 스펙트럼 바 */}
         <div className="flex items-center gap-1 mb-5 text-[10px] font-bold">
@@ -324,7 +324,7 @@ const Tab1 = ({ onScore }) => {
                 className="rounded-xl overflow-hidden cursor-pointer transition-all duration-300"
                 style={{
                   background: isOpen ? `${c.tagColor}10` : "rgba(255,255,255,0.03)",
-                  border: `1px solid ${isOpen ? c.tagColor + "40" : "rgba(255,255,255,0.07)"}`,
+                  border: `1px solid ${isOpen ? c.tagColor + "40" : "rgba(0,0,0,0.07)"}`,
                 }}>
                 <div className="flex items-center gap-3 p-3.5">
                   {/* 번호 */}
@@ -352,7 +352,7 @@ const Tab1 = ({ onScore }) => {
                   <div className="px-4 pb-4 pl-[60px] space-y-2" style={{ animation: isOpen ? "fadeIn 0.3s ease-out" : "" }}>
                     <p className="text-xs font-bold mb-1" style={{ color: c.tagColor }}>"{c.tagline}"</p>
                     <p className="text-sm text-slate-300 leading-relaxed">{c.desc}</p>
-                    <div className="rounded-lg p-2.5 mt-2" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
+                    <div className="rounded-lg p-2.5 mt-2" style={{ background: "#f8fafc", border: "1px solid rgba(255,255,255,0.07)" }}>
                       <p className="text-[10px] font-bold text-slate-500 mb-1">💡 실제 예시</p>
                       <p className="text-xs text-slate-400">{c.example}</p>
                     </div>
@@ -367,7 +367,7 @@ const Tab1 = ({ onScore }) => {
       {/* ── Card 2: AI 기술 역사 (기존 타임라인, 이동) ── */}
       <Card t={t}>
         <SecHead icon={BookOpen} label="AI 기술 역사 — 시대별 타임라인" t={t} />
-        <p className="text-sm text-slate-400 mb-6">시대를 클릭해 주요 사건을 확인하세요.</p>
+        <p className="text-sm text-slate-500 mb-6">시대를 클릭해 주요 사건을 확인하세요.</p>
 
         {/* Era selector */}
         <div className="relative mb-6">
@@ -383,12 +383,12 @@ const Tab1 = ({ onScore }) => {
                   className="relative flex flex-col items-center gap-2 p-4 rounded-xl transition-all duration-300 text-center"
                   style={{
                     background: isActive ? `${era.color}18` : "rgba(255,255,255,0.03)",
-                    border: `1px solid ${isActive ? era.color + "50" : "rgba(255,255,255,0.07)"}`,
+                    border: `1px solid ${isActive ? era.color + "50" : "rgba(0,0,0,0.07)"}`,
                     boxShadow: isActive ? `0 0 24px ${era.color}30` : "none",
                     transform: isActive ? "translateY(-2px)" : "translateY(0)",
                   }}>
                   <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg z-10"
-                    style={{ background: isActive ? era.color : "rgba(255,255,255,0.06)", border: `2px solid ${isActive ? era.color : "rgba(255,255,255,0.1)"}`, boxShadow: isActive ? `0 0 16px ${era.color}60` : "none" }}>
+                    style={{ background: isActive ? era.color : "rgba(255,255,255,0.06)", border: `2px solid ${isActive ? era.color : "rgba(0,0,0,0.08)"}`, boxShadow: isActive ? `0 0 16px ${era.color}60` : "none" }}>
                     {era.emoji}
                   </div>
                   <div>
@@ -406,7 +406,7 @@ const Tab1 = ({ onScore }) => {
           <div style={{ animation: "fadeIn 0.3s ease-out" }}>
             <div className="rounded-xl p-4 mb-4"
               style={{ background: `${activeEraData.color}10`, border: `1px solid ${activeEraData.color}30` }}>
-              <p className="text-sm text-slate-300">{activeEraData.desc}</p>
+              <p className="text-sm text-slate-600">{activeEraData.desc}</p>
             </div>
             <div className="space-y-2">
               {activeEraData.milestones.map((ms, i) => {
@@ -418,7 +418,7 @@ const Tab1 = ({ onScore }) => {
                     className="rounded-xl overflow-hidden cursor-pointer transition-all duration-300"
                     style={{
                       background: isOpen ? `${activeEraData.color}10` : "rgba(255,255,255,0.03)",
-                      border: `1px solid ${isOpen ? activeEraData.color + "40" : "rgba(255,255,255,0.07)"}`,
+                      border: `1px solid ${isOpen ? activeEraData.color + "40" : "rgba(0,0,0,0.07)"}`,
                     }}>
                     <div className="flex items-center gap-3 p-4">
                       <div className="w-12 text-center shrink-0">
@@ -428,7 +428,7 @@ const Tab1 = ({ onScore }) => {
                       <span className="text-lg shrink-0">{ms.icon}</span>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-bold text-white">{ms.event}</p>
-                        <p className="text-xs text-slate-500">{ms.who}</p>
+                        <p className="text-xs text-slate-400">{ms.who}</p>
                       </div>
                       <ChevronRight size={14} className="text-slate-600 shrink-0 transition-transform duration-300"
                         style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0)" }} />
@@ -460,7 +460,7 @@ const Tab1 = ({ onScore }) => {
           <div className="space-y-5">
             {/* Progress */}
             <div className="flex items-center gap-3">
-              <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+              <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "#e2e8f0" }}>
                 <div className="h-full rounded-full transition-all duration-500"
                   style={{ width: `${(qIndex / questions.length) * 100}%`, background: t.grad }} />
               </div>
@@ -495,7 +495,7 @@ const Tab1 = ({ onScore }) => {
                 const isCorrect = i === curQ.answer;
                 const showResult = selected !== null;
                 let bg = "rgba(255,255,255,0.04)";
-                let border = "rgba(255,255,255,0.08)";
+                let border = "rgba(0,0,0,0.08)";
                 let color = "#94a3b8";
                 let shadow = "none";
                 if (showResult) {
@@ -527,7 +527,7 @@ const Tab1 = ({ onScore }) => {
                 border: `1px solid ${quizScore >= 5 ? "rgba(52,211,153,0.3)" : quizScore >= 3 ? "rgba(251,191,36,0.3)" : "rgba(248,113,113,0.3)"}`,
               }}>
               {quizScore === questions.length && <Trophy size={32} style={{ color: "#34d399" }} className="mx-auto mb-3" />}
-              <div className="text-5xl font-black text-white mb-1">
+              <div className="text-5xl font-black text-slate-800 mb-1">
                 {quizScore}<span className="text-2xl text-slate-500">/{questions.length}</span>
               </div>
               <p className="font-bold text-lg mb-1" style={{ color: quizScore >= 10 ? "#34d399" : quizScore >= 7 ? "#fbbf24" : "#f87171" }}>
@@ -597,7 +597,7 @@ const Tab2 = ({ onScore }) => {
             <PBtn t={t} onClick={() => setTokenized(!tokenized)}>
               {tokenized ? "원문 보기" : "✂️ 토큰화 실행"}
             </PBtn>
-            <p className="text-sm text-slate-400 leading-relaxed">AI는 문장을 한꺼번에 이해하지 못합니다. 텍스트를 작은 조각(토큰)으로 쪼개는 것이 첫 단계입니다.</p>
+            <p className="text-sm text-slate-600 leading-relaxed">AI는 문장을 한꺼번에 이해하지 못합니다. 텍스트를 작은 조각(토큰)으로 쪼개는 것이 첫 단계입니다.</p>
           </div>
         );
       }
@@ -613,8 +613,8 @@ const Tab2 = ({ onScore }) => {
         ];
         return (
           <div className="space-y-5">
-            <p className="text-sm text-slate-400">각 단어에 수치(벡터)를 부여합니다. 컴퓨터가 이해할 수 있는 숫자로 변환하는 과정입니다.</p>
-            <div className="rounded-xl p-4 space-y-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
+            <p className="text-sm text-slate-500">각 단어에 수치(벡터)를 부여합니다. 컴퓨터가 이해할 수 있는 숫자로 변환하는 과정입니다.</p>
+            <div className="rounded-xl p-4 space-y-3" style={{ background: "#f8fafc", border: "1px solid rgba(255,255,255,0.07)" }}>
               {embs.map((e, i) => (
                 <div key={i} className="flex items-center gap-3 rounded-lg p-3"
                   style={{ background: "rgba(56,189,248,0.06)", border: "1px solid rgba(56,189,248,0.12)" }}>
@@ -626,7 +626,7 @@ const Tab2 = ({ onScore }) => {
                       <div key={j} className="flex items-center gap-1.5 text-xs"
                         style={{ animation: `fadeIn 0.3s ease-out ${(i * 2 + j) * 80}ms both` }}>
                         <span className="text-slate-500">{s.label}</span>
-                        <div className="w-14 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.1)" }}>
+                        <div className="w-14 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(0,0,0,0.08)" }}>
                           <div className="h-full rounded-full transition-all duration-700"
                             style={{ width: `${s.val * 10}%`, background: t.grad }} />
                         </div>
@@ -648,7 +648,7 @@ const Tab2 = ({ onScore }) => {
         const [show, setShow] = useState(false);
         return (
           <div className="space-y-5">
-            <p className="text-sm text-slate-400">단어들 사이의 관계와 숨겨진 문맥을 파악합니다.</p>
+            <p className="text-sm text-slate-500">단어들 사이의 관계와 숨겨진 문맥을 파악합니다.</p>
             <div className="rounded-xl p-5" style={{ background: "rgba(56,189,248,0.06)", border: "1px solid rgba(56,189,248,0.15)" }}>
               <div className="flex items-center justify-center gap-3 mb-5 flex-wrap">
                 {["저", "내일", "오후에"].map((w, i) => (
@@ -664,9 +664,9 @@ const Tab2 = ({ onScore }) => {
               </div>
               {show && (
                 <div className="space-y-2" style={{ animation: "fadeIn 0.5s ease-out" }}>
-                  <div className="flex items-center gap-3 p-3 rounded-lg" style={{ background: "rgba(255,255,255,0.04)" }}>
+                  <div className="flex items-center gap-3 p-3 rounded-lg" style={{ background: "#f8fafc" }}>
                     <span>💨</span>
-                    <span className="text-sm text-slate-300">어제 김대리가 한숨을 쉬었다는 사실!</span>
+                    <span className="text-sm text-slate-600">어제 김대리가 한숨을 쉬었다는 사실!</span>
                   </div>
                   <div className="p-3 rounded-lg" style={{ background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.25)" }}>
                     <p className="text-sm font-bold" style={{ color: "#f87171" }}>
@@ -696,7 +696,7 @@ const Tab2 = ({ onScore }) => {
         }, [running]);
         return (
           <div className="space-y-5">
-            <p className="text-sm text-slate-400">정보들이 신경망 레이어를 차례로 통과하며 결론을 향해 전진합니다.</p>
+            <p className="text-sm text-slate-500">정보들이 신경망 레이어를 차례로 통과하며 결론을 향해 전진합니다.</p>
             <div className="rounded-xl p-5" style={{ background: "rgba(56,189,248,0.06)", border: "1px solid rgba(56,189,248,0.15)" }}>
               <div className="flex items-center gap-1.5 sm:gap-2">
                 {layers.map((l, i) => (
@@ -705,7 +705,7 @@ const Tab2 = ({ onScore }) => {
                       style={{
                         background: i <= active ? t.grad : "rgba(255,255,255,0.04)",
                         color: i <= active ? "white" : "#475569",
-                        border: `1px solid ${i <= active ? t.accent : "rgba(255,255,255,0.08)"}`,
+                        border: `1px solid ${i <= active ? t.accent : "rgba(0,0,0,0.08)"}`,
                         boxShadow: i <= active ? `0 0 20px ${t.glow}` : "none",
                         transform: i === active ? "scale(1.05)" : "scale(1)",
                       }}>
@@ -738,15 +738,15 @@ const Tab2 = ({ onScore }) => {
         const colors = [t.accent, "#818cf8", "#475569"];
         return (
           <div className="space-y-5">
-            <p className="text-sm text-slate-400">최종 계산 결과가 확률 분포로 변환됩니다. 각 예측에 0~100%의 확률이 부여됩니다.</p>
+            <p className="text-sm text-slate-500">최종 계산 결과가 확률 분포로 변환됩니다. 각 예측에 0~100%의 확률이 부여됩니다.</p>
             <div className="rounded-xl p-5 space-y-4" style={{ background: "rgba(56,189,248,0.06)", border: "1px solid rgba(56,189,248,0.15)" }}>
               {preds.map((p, i) => (
                 <div key={i} className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="font-bold text-white">{p.label}</span>
+                    <span className="font-bold text-slate-800">{p.label}</span>
                     <span className="font-mono font-bold" style={{ color: colors[i] }}>{show ? `${p.prob}%` : "??"}</span>
                   </div>
-                  <div className="h-3 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                  <div className="h-3 rounded-full overflow-hidden" style={{ background: "#e2e8f0" }}>
                     <div className="h-full rounded-full transition-all duration-1000 ease-out"
                       style={{
                         width: show ? `${p.prob}%` : "0%",
@@ -758,8 +758,8 @@ const Tab2 = ({ onScore }) => {
                 </div>
               ))}
               {show && (
-                <div className="mt-2 p-3 rounded-lg text-center" style={{ background: "rgba(255,255,255,0.04)", animation: "fadeIn 0.5s ease-out" }}>
-                  <p className="text-sm text-slate-300">부장님 결론: <span className="font-bold text-white">"김대리, 내일 반차 쓸 거지?"</span></p>
+                <div className="mt-2 p-3 rounded-lg text-center" style={{ background: "#f8fafc", animation: "fadeIn 0.5s ease-out" }}>
+                  <p className="text-sm text-slate-600">부장님 결론: <span className="font-bold text-slate-800">"김대리, 내일 반차 쓸 거지?"</span></p>
                 </div>
               )}
             </div>
@@ -775,7 +775,7 @@ const Tab2 = ({ onScore }) => {
         const tokens = ["저", "내일", "오후에", "반차", "쓰겠습니다"];
         return (
           <div className="space-y-5">
-            <p className="text-sm text-slate-400">예측된 단어를 붙이고, 다시 전체 문장으로 다음 단어를 예측하는 순환 구조입니다.</p>
+            <p className="text-sm text-slate-500">예측된 단어를 붙이고, 다시 전체 문장으로 다음 단어를 예측하는 순환 구조입니다.</p>
             <div className="rounded-xl p-5" style={{ background: "rgba(56,189,248,0.06)", border: "1px solid rgba(56,189,248,0.15)" }}>
               <div className="flex flex-wrap gap-2 mb-4">
                 {tokens.slice(0, 3 + iter).map((tk, i) => (
@@ -783,7 +783,7 @@ const Tab2 = ({ onScore }) => {
                     style={{
                       background: i >= 3 ? t.grad : "rgba(255,255,255,0.06)",
                       color: "white",
-                      border: `1px solid ${i >= 3 ? t.accent : "rgba(255,255,255,0.1)"}`,
+                      border: `1px solid ${i >= 3 ? t.accent : "rgba(0,0,0,0.08)"}`,
                       boxShadow: i >= 3 ? `0 0 12px ${t.glow}` : "none",
                       animation: i >= 3 ? "slideUp 0.4s ease-out" : "",
                     }}>{tk}</span>
@@ -817,12 +817,12 @@ const Tab2 = ({ onScore }) => {
         };
         return (
           <div className="space-y-5">
-            <p className="text-sm text-slate-400">예측이 틀렸을 때 오차를 계산하고, 역방향으로 가중치를 수정합니다.</p>
+            <p className="text-sm text-slate-500">예측이 틀렸을 때 오차를 계산하고, 역방향으로 가중치를 수정합니다.</p>
             <div className={`rounded-xl p-5 ${shake ? "animate-[shake_0.5s]" : ""}`}
               style={{ background: "rgba(56,189,248,0.06)", border: "1px solid rgba(56,189,248,0.15)" }}>
               {phase === 0 && (
                 <div className="text-center space-y-2">
-                  <p className="text-sm text-slate-300">부장님의 예측: <span className="font-bold text-white">"반차 쓸 거지?" (80%)</span></p>
+                  <p className="text-sm text-slate-600">부장님의 예측: <span className="font-bold text-slate-800">"반차 쓸 거지?" (80%)</span></p>
                   <p className="text-slate-500 text-sm">그런데 김대리의 실제 대답은...</p>
                 </div>
               )}
@@ -836,7 +836,7 @@ const Tab2 = ({ onScore }) => {
               )}
               {phase >= 2 && (
                 <div className="mt-4 space-y-3" style={{ animation: "fadeIn 0.5s" }}>
-                  <div className="p-4 rounded-lg space-y-2" style={{ background: "rgba(255,255,255,0.04)" }}>
+                  <div className="p-4 rounded-lg space-y-2" style={{ background: "#f8fafc" }}>
                     <p className="text-xs text-slate-500 mb-2">🔧 가중치 수정 중...</p>
                     {[
                       { label: '"한숨→반차" 가중치', from: "0.92", to: "0.3", dir: "↓" },
@@ -923,7 +923,7 @@ const Tab2 = ({ onScore }) => {
               style={{
                 background: i === step ? t.grad : "rgba(255,255,255,0.04)",
                 color: i === step ? "white" : "#64748b",
-                border: `1px solid ${i === step ? t.accent : "rgba(255,255,255,0.07)"}`,
+                border: `1px solid ${i === step ? t.accent : "rgba(0,0,0,0.07)"}`,
                 boxShadow: i === step ? `0 0 16px ${t.glow}` : "none",
               }}>
               <span className="font-mono">{i + 1}</span>
@@ -940,8 +940,8 @@ const Tab2 = ({ onScore }) => {
               </div>
             ); })()}
             <div>
-              <h3 className="font-bold text-white">{steps[step].title}</h3>
-              <p className="text-xs text-slate-500">{steps[step].subtitle}</p>
+              <h3 className="font-bold text-slate-800">{steps[step].title}</h3>
+              <p className="text-xs text-slate-400">{steps[step].subtitle}</p>
             </div>
           </div>
           <StepContent />
@@ -961,7 +961,7 @@ const Tab2 = ({ onScore }) => {
         <GameHead icon={Gamepad2} label="부장님 시뮬레이터 — 핵심 단어 잡기" t={t} />
         {!gameStarted ? (
           <div className="text-center py-8">
-            <p className="text-sm text-slate-400 mb-6">핵심 단어를 빠르게 찾고 다음 단어를 예측하세요!</p>
+            <p className="text-sm text-slate-500 mb-6">핵심 단어를 빠르게 찾고 다음 단어를 예측하세요!</p>
             <PBtn t={t} onClick={() => setGameStarted(true)} icon={Play}>게임 시작</PBtn>
           </div>
         ) : (
@@ -971,7 +971,7 @@ const Tab2 = ({ onScore }) => {
                 <span>{gamePhase === "attention" ? "⏱ 핵심 단어 클릭!" : gamePhase === "predict" ? "⏱ 다음 단어 예측!" : "결과"}</span>
                 {gamePhase !== "result" && <span>{Math.round(timeLeft)}%</span>}
               </div>
-              <div className="h-2 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+              <div className="h-2 rounded-full overflow-hidden" style={{ background: "#e2e8f0" }}>
                 <div className="h-full rounded-full transition-all duration-100"
                   style={{
                     width: `${gamePhase !== "result" ? timeLeft : 0}%`,
@@ -994,7 +994,7 @@ const Tab2 = ({ onScore }) => {
                     style={{
                       background: selectedWords.has(w) ? t.grad : "rgba(255,255,255,0.05)",
                       color: "white",
-                      border: `1px solid ${selectedWords.has(w) ? t.accent : "rgba(255,255,255,0.1)"}`,
+                      border: `1px solid ${selectedWords.has(w) ? t.accent : "rgba(0,0,0,0.08)"}`,
                       boxShadow: selectedWords.has(w) ? `0 0 16px ${t.glow}` : "none",
                       cursor: gamePhase !== "attention" ? "default" : "pointer",
                     }}>{w}</button>
@@ -1010,9 +1010,9 @@ const Tab2 = ({ onScore }) => {
                   {predOptions.map((opt, i) => (
                     <button key={i} onClick={() => handlePred(opt)}
                       className="p-3 rounded-xl text-sm text-left transition-all duration-200"
-                      style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "white" }}
+                      style={{ background: "#f8fafc", border: "1px solid rgba(255,255,255,0.08)", color: "white" }}
                       onMouseEnter={e => { e.currentTarget.style.borderColor = t.border; e.currentTarget.style.background = t.dim; }}
-                      onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; e.currentTarget.style.background = "rgba(255,255,255,0.04)"; }}>
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(0,0,0,0.08)"; e.currentTarget.style.background = "rgba(255,255,255,0.04)"; }}>
                       <span className="font-bold">{opt.word}</span>
                       <span className="text-xs text-slate-500 ml-2">{opt.prob}%</span>
                     </button>
@@ -1028,8 +1028,8 @@ const Tab2 = ({ onScore }) => {
                     background: gameScore >= 75 ? "rgba(52,211,153,0.08)" : gameScore >= 50 ? "rgba(251,191,36,0.08)" : "rgba(248,113,113,0.08)",
                     border: `1px solid ${gameScore >= 75 ? "rgba(52,211,153,0.3)" : gameScore >= 50 ? "rgba(251,191,36,0.3)" : "rgba(248,113,113,0.3)"}`,
                   }}>
-                  <div className="text-4xl font-black text-white mb-1">{gameScore}<span className="text-xl text-slate-500">점</span></div>
-                  <p className="text-sm text-slate-300">{gameScore >= 75 ? "🎉 훌륭한 눈치! 부장님 레벨!" : gameScore >= 50 ? "👍 나쁘지 않아요!" : "😅 아직 눈치가..."}</p>
+                  <div className="text-4xl font-black text-slate-800 mb-1">{gameScore}<span className="text-xl text-slate-500">점</span></div>
+                  <p className="text-sm text-slate-600">{gameScore >= 75 ? "🎉 훌륭한 눈치! 부장님 레벨!" : gameScore >= 50 ? "👍 나쁘지 않아요!" : "😅 아직 눈치가..."}</p>
                   <div className="mt-3 text-xs text-slate-500">
                     <p>어텐션: {[...selectedWords].filter(w => keyWords.has(w)).length}/{keyWords.size} 핵심 단어</p>
                     <p>예측: {selectedPrediction ? (selectedPrediction.correct ? "정답 ✅" : `"${selectedPrediction.word}" 오답 ❌`) : "시간 초과 ⏰"}</p>
@@ -1118,19 +1118,19 @@ const Tab3 = ({ onScore }) => {
     <div className="space-y-6">
       <Card t={t}>
         <SecHead icon={BookOpen} label="전력망의 미래 — 수동 vs AI 예측 비교" t={t} />
-        <p className="text-sm text-slate-400 mb-6">시나리오를 선택해 수동 예측과 AI 예측의 차이를 비교해 보세요.</p>
+        <p className="text-sm text-slate-500 mb-6">시나리오를 선택해 수동 예측과 AI 예측의 차이를 비교해 보세요.</p>
         <div className="grid grid-cols-2 gap-3 mb-6">
           {scenarios.map(s => (
             <button key={s.id} onClick={() => { setScenario(s.id); setShowAi(false); }}
               className="p-4 rounded-xl text-left transition-all duration-200"
               style={{
                 background: scenario === s.id ? t.dim : "rgba(255,255,255,0.03)",
-                border: `1px solid ${scenario === s.id ? t.border : "rgba(255,255,255,0.07)"}`,
+                border: `1px solid ${scenario === s.id ? t.border : "rgba(0,0,0,0.07)"}`,
                 boxShadow: scenario === s.id ? `0 0 20px ${t.glow}` : "none",
               }}>
               <span className="text-2xl block mb-2">{s.icon}</span>
               <span className="text-sm font-bold text-white block">{s.label}</span>
-              <span className="text-xs text-slate-500">{s.desc}</span>
+              <span className="text-xs text-slate-400">{s.desc}</span>
             </button>
           ))}
         </div>
@@ -1141,7 +1141,7 @@ const Tab3 = ({ onScore }) => {
               { label: "AI 예측", icon: Bot, color: "#34d399", ok: true, show: showAi },
             ].map((side, i) => (
               <div key={i} className="rounded-xl p-4"
-                style={{ background: "rgba(255,255,255,0.03)", border: `1px solid ${side.show ? (side.ok ? "rgba(52,211,153,0.2)" : "rgba(248,113,113,0.2)") : "rgba(255,255,255,0.07)"}` }}>
+                style={{ background: "#f8fafc", border: `1px solid ${side.show ? (side.ok ? "rgba(52,211,153,0.2)" : "rgba(248,113,113,0.2)") : "rgba(0,0,0,0.07)"}` }}>
                 <div className="flex items-center gap-2 mb-3">
                   <side.icon size={13} style={{ color: side.color }} />
                   <span className="text-xs font-bold" style={{ color: side.color }}>{side.label}</span>
@@ -1184,7 +1184,7 @@ const Tab3 = ({ onScore }) => {
         <GameHead icon={Gamepad2} label="블랙아웃을 막아라!" t={t} />
         {!gameRunning ? (
           <div className="text-center py-8">
-            <p className="text-sm text-slate-400 mb-2">전력 수요에 맞춰 발전량을 조절하세요!</p>
+            <p className="text-sm text-slate-500 mb-2">전력 수요에 맞춰 발전량을 조절하세요!</p>
             <p className="text-xs text-slate-600 mb-6">차이가 너무 크면 정전 발생 💥</p>
             <PBtn t={t} onClick={startGame} icon={Play}>시작하기</PBtn>
           </div>
@@ -1216,11 +1216,11 @@ const Tab3 = ({ onScore }) => {
               )}
             </div>
 
-            <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+            <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "#e2e8f0" }}>
               <div className="h-full rounded-full transition-all" style={{ width: `${gameTime}%`, background: t.grad }} />
             </div>
 
-            <div className="rounded-xl p-4" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
+            <div className="rounded-xl p-4" style={{ background: "#f8fafc", border: "1px solid rgba(255,255,255,0.07)" }}>
               <div className="flex gap-4 text-xs font-semibold mb-3">
                 <span className="flex items-center gap-1.5" style={{ color: "#f87171" }}>
                   <div className="w-4 h-0.5 rounded" style={{ background: "#f87171" }} />전력 수요
@@ -1229,7 +1229,7 @@ const Tab3 = ({ onScore }) => {
                   <div className="w-4 h-0.5 rounded" style={{ background: "#38bdf8" }} />발전량(나)
                 </span>
               </div>
-              <div className="h-20 relative rounded-lg overflow-hidden" style={{ background: "rgba(0,0,0,0.2)" }}>
+              <div className="h-20 relative rounded-lg overflow-hidden" style={{ background: "rgba(0,0,0,0.04)" }}>
                 <MiniChart data={demandHistory} color="#f87171" />
                 <div className="absolute inset-0"><MiniChart data={supplyHistory} color="#38bdf8" /></div>
               </div>
@@ -1254,8 +1254,8 @@ const Tab3 = ({ onScore }) => {
                   background: survived ? "rgba(52,211,153,0.08)" : "rgba(248,113,113,0.08)",
                   border: `1px solid ${survived ? "rgba(52,211,153,0.3)" : "rgba(248,113,113,0.3)"}`,
                 }}>
-                <p className="text-xl font-black text-white mb-1">{survived ? "🎉 블랙아웃 방어 성공!" : "💥 정전 발생!"}</p>
-                <p className="text-sm text-slate-400">{survived ? (aiMode ? "AI 덕분에 안정 유지!" : "수동으로 성공! 대단합니다!") : "수요와 공급의 괴리가 너무 커졌습니다."}</p>
+                <p className="text-xl font-black text-slate-800 mb-1">{survived ? "🎉 블랙아웃 방어 성공!" : "💥 정전 발생!"}</p>
+                <p className="text-sm text-slate-500">{survived ? (aiMode ? "AI 덕분에 안정 유지!" : "수동으로 성공! 대단합니다!") : "수요와 공급의 괴리가 너무 커졌습니다."}</p>
                 <div className="mt-4"><GBtn onClick={startGame}><RotateCcw size={13} />다시 하기</GBtn></div>
               </div>
             )}
@@ -1316,14 +1316,14 @@ const Tab4 = ({ onScore }) => {
     <div className="space-y-6">
       <Card t={t}>
         <SecHead icon={BookOpen} label="업무 지시 공식 — 완벽한 프롬프트의 3요소" t={t} />
-        <p className="text-sm text-slate-400 mb-6">각 블록을 클릭해 설명을 확인하세요.</p>
+        <p className="text-sm text-slate-500 mb-6">각 블록을 클릭해 설명을 확인하세요.</p>
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           {conceptBlocks.map((b, i) => (
             <button key={b.id} onClick={() => setActiveBlock(activeBlock === b.id ? null : b.id)}
               className="flex-1 p-4 rounded-xl text-left transition-all duration-200"
               style={{
                 background: activeBlock === b.id ? t.dim : "rgba(255,255,255,0.03)",
-                border: `1px solid ${activeBlock === b.id ? t.border : "rgba(255,255,255,0.07)"}`,
+                border: `1px solid ${activeBlock === b.id ? t.border : "rgba(0,0,0,0.07)"}`,
                 boxShadow: activeBlock === b.id ? `0 0 20px ${t.glow}` : "none",
               }}>
               <div className="flex items-center gap-2 mb-2">
@@ -1340,11 +1340,11 @@ const Tab4 = ({ onScore }) => {
           <div className="rounded-xl p-4" style={{ background: t.dim, border: `1px solid ${t.border}`, animation: "fadeIn 0.3s" }}>
             <div className="flex items-start gap-2">
               <Lightbulb size={14} style={{ color: t.accent }} className="mt-0.5 shrink-0" />
-              <p className="text-sm text-slate-300">{conceptBlocks.find(b => b.id === activeBlock)?.desc}</p>
+              <p className="text-sm text-slate-600">{conceptBlocks.find(b => b.id === activeBlock)?.desc}</p>
             </div>
           </div>
         )}
-        <div className="mt-5 p-4 rounded-xl" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
+        <div className="mt-5 p-4 rounded-xl" style={{ background: "#f8fafc", border: "1px solid rgba(255,255,255,0.07)" }}>
           <p className="text-[10px] font-bold tracking-widest uppercase text-slate-500 mb-2">조합 결과</p>
           <p className="text-sm text-slate-300 leading-relaxed">
             <span className="font-bold" style={{ color: "#34d399" }}>[역할]</span> {conceptBlocks[0].example} +{" "}
@@ -1357,7 +1357,7 @@ const Tab4 = ({ onScore }) => {
 
       <Card t={t} game>
         <GameHead icon={Gamepad2} label="프롬프트 깎는 장인" t={t} />
-        <p className="text-sm text-slate-400 mb-6">좋은 블록 3개를 골라 올바른 슬롯에 넣으세요!</p>
+        <p className="text-sm text-slate-500 mb-6">좋은 블록 3개를 골라 올바른 슬롯에 넣으세요!</p>
 
         <div className="grid grid-cols-3 gap-3 mb-6">
           {slotLabels.map((label, i) => {
@@ -1368,7 +1368,7 @@ const Tab4 = ({ onScore }) => {
               <div key={i} className="rounded-xl p-3 min-h-[90px] flex flex-col transition-all duration-300"
                 style={{
                   background: isGood ? "rgba(52,211,153,0.08)" : isBad ? "rgba(248,113,113,0.08)" : slots[i] ? t.dim : "rgba(255,255,255,0.02)",
-                  border: `2px dashed ${isGood ? "rgba(52,211,153,0.4)" : isBad ? "rgba(248,113,113,0.4)" : slots[i] ? t.border : "rgba(255,255,255,0.1)"}`,
+                  border: `2px dashed ${isGood ? "rgba(52,211,153,0.4)" : isBad ? "rgba(248,113,113,0.4)" : slots[i] ? t.border : "rgba(0,0,0,0.08)"}`,
                 }}>
                 <span className="text-[10px] font-bold tracking-widest uppercase mb-2"
                   style={{ color: isGood ? "#34d399" : isBad ? "#f87171" : t.accent }}>{label}</span>
@@ -1391,7 +1391,7 @@ const Tab4 = ({ onScore }) => {
               <div key={block.id} className="rounded-xl p-3 transition-all duration-200"
                 style={{
                   background: inSlot ? "rgba(255,255,255,0.02)" : "rgba(255,255,255,0.04)",
-                  border: `1px solid ${inSlot ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.1)"}`,
+                  border: `1px solid ${inSlot ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.08)"}`,
                   opacity: inSlot ? 0.3 : 1,
                 }}>
                 <p className="text-xs font-medium text-slate-200 mb-2">{block.text}</p>
@@ -1424,8 +1424,8 @@ const Tab4 = ({ onScore }) => {
                 background: allGood ? "rgba(52,211,153,0.08)" : "rgba(248,113,113,0.08)",
                 border: `1px solid ${allGood ? "rgba(52,211,153,0.3)" : "rgba(248,113,113,0.3)"}`,
               }}>
-              <p className="text-xl font-black text-white mb-1">{allGood ? "🏆 프롬프트 장인 달성!" : "😵 AI가 혼란스러워합니다!"}</p>
-              <p className="text-sm text-slate-400">{allGood ? "완벽한 조합입니다!" : '"대충 써줘" 같은 모호한 지시는 좋은 결과를 내지 못해요.'}</p>
+              <p className="text-xl font-black text-slate-800 mb-1">{allGood ? "🏆 프롬프트 장인 달성!" : "😵 AI가 혼란스러워합니다!"}</p>
+              <p className="text-sm text-slate-500">{allGood ? "완벽한 조합입니다!" : '"대충 써줘" 같은 모호한 지시는 좋은 결과를 내지 못해요.'}</p>
             </div>
             <GBtn onClick={() => { setSlots([null, null, null]); setGameSubmitted(false); }}>
               <RotateCcw size={13} />다시 하기
@@ -1501,9 +1501,9 @@ const Tab5 = ({ onScore }) => {
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-3">
             <AlertTriangle size={15} style={{ color: t.accent }} />
-            <h4 className="font-bold text-white text-sm">환각 (Hallucination)</h4>
+            <h4 className="font-bold text-slate-800 text-sm">환각 (Hallucination)</h4>
           </div>
-          <p className="text-sm text-slate-400 mb-5">상상력 온도를 올려보세요. AI가 점점 그럴싸한 거짓말을 만들어냅니다.</p>
+          <p className="text-sm text-slate-500 mb-5">상상력 온도를 올려보세요. AI가 점점 그럴싸한 거짓말을 만들어냅니다.</p>
           <div className="rounded-xl p-5" style={{ background: "rgba(248,113,113,0.05)", border: "1px solid rgba(248,113,113,0.12)" }}>
             <div className="space-y-2 mb-4">
               <div className="flex justify-between text-xs font-semibold">
@@ -1539,16 +1539,16 @@ const Tab5 = ({ onScore }) => {
         <div>
           <div className="flex items-center gap-2 mb-3">
             <Shield size={15} style={{ color: t.accent }} />
-            <h4 className="font-bold text-white text-sm">보안 위험</h4>
+            <h4 className="font-bold text-slate-800 text-sm">보안 위험</h4>
           </div>
-          <p className="text-sm text-slate-400 mb-5">기밀 데이터를 AI에 입력하면 어떤 일이 생기는지 확인해 보세요.</p>
+          <p className="text-sm text-slate-500 mb-5">기밀 데이터를 AI에 입력하면 어떤 일이 생기는지 확인해 보세요.</p>
           <div className="rounded-xl p-5" style={{ background: "rgba(248,113,113,0.05)", border: "1px solid rgba(248,113,113,0.12)" }}>
             {!showSecurity ? (
               <div className="text-center">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg mb-4"
-                  style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                  style={{ background: "#f8fafc", border: "1px solid rgba(255,255,255,0.1)" }}>
                   <FileText size={13} className="text-slate-400" />
-                  <span className="text-sm text-slate-300">"2026_발전소_설계도면_v3.dwg"</span>
+                  <span className="text-sm text-slate-600">"2026_발전소_설계도면_v3.dwg"</span>
                 </div>
                 <br />
                 <PBtn t={t} onClick={handleSecurity}>⬆️ AI에 업로드 시뮬레이션</PBtn>
@@ -1556,7 +1556,7 @@ const Tab5 = ({ onScore }) => {
             ) : (
               <div className="space-y-3">
                 {[
-                  { phase: 0, icon: Send, bg: "rgba(255,255,255,0.04)", border: "rgba(255,255,255,0.1)", text: "rgba(148,163,184,1)", label: "파일을 AI 서버로 전송 중..." },
+                  { phase: 0, icon: Send, bg: "rgba(255,255,255,0.04)", border: "rgba(0,0,0,0.08)", text: "rgba(148,163,184,1)", label: "파일을 AI 서버로 전송 중..." },
                   { phase: 1, icon: Globe, bg: "rgba(251,191,36,0.08)", border: "rgba(251,191,36,0.25)", text: "#fbbf24", label: "⚠️ 데이터가 외부 서버(미국)에 저장됨!" },
                   { phase: 2, icon: AlertTriangle, bg: "rgba(248,113,113,0.08)", border: "rgba(248,113,113,0.25)", text: "#f87171", label: "🚨 기밀 도면이 외부 서버에 영구 저장될 수 있습니다. 절대 사내 기밀을 외부 AI에 입력하지 마세요!" },
                 ].map((row, i) => (
@@ -1581,7 +1581,7 @@ const Tab5 = ({ onScore }) => {
 
       <Card t={t} game>
         <GameHead icon={Gamepad2} label="보안관 스와이프" t={t} />
-        <p className="text-sm text-slate-400 mb-6">AI 사용 요청을 심사하세요. 위험하면 차단, 안전하면 허용!</p>
+        <p className="text-sm text-slate-500 mb-6">AI 사용 요청을 심사하세요. 위험하면 차단, 안전하면 허용!</p>
 
         {currentCard < cards.length ? (
           <div className="space-y-6">
@@ -1595,7 +1595,7 @@ const Tab5 = ({ onScore }) => {
               cardAnim === "swipe-right" ? "translate-x-full opacity-0 rotate-12" : ""
             }`}>
               <div className="p-6 rounded-2xl min-h-[150px] flex flex-col items-center justify-center text-center"
-                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                style={{ background: "#f8fafc", border: "1px solid rgba(255,255,255,0.1)" }}>
                 <MessageSquare size={22} className="text-slate-500 mb-4" />
                 <p className="text-sm font-bold text-white leading-relaxed">"{cards[currentCard].text}"</p>
               </div>
@@ -1625,8 +1625,8 @@ const Tab5 = ({ onScore }) => {
                 border: `1px solid ${gameScore === cards.length ? "rgba(52,211,153,0.3)" : "rgba(251,191,36,0.3)"}`,
               }}>
               {gameScore === cards.length && <Trophy size={28} style={{ color: "#34d399" }} className="mx-auto mb-2" />}
-              <div className="text-4xl font-black text-white mb-1">{gameScore}<span className="text-xl text-slate-500">/{cards.length}</span></div>
-              <p className="text-sm text-slate-300">{gameScore === cards.length ? "🛡️ 완벽한 보안관!" : `${cards.length - gameScore}건을 놓쳤습니다.`}</p>
+              <div className="text-4xl font-black text-slate-800 mb-1">{gameScore}<span className="text-xl text-slate-500">/{cards.length}</span></div>
+              <p className="text-sm text-slate-600">{gameScore === cards.length ? "🛡️ 완벽한 보안관!" : `${cards.length - gameScore}건을 놓쳤습니다.`}</p>
             </div>
             <div className="space-y-2">
               {results.map((r, i) => (
@@ -1681,42 +1681,41 @@ export default function App() {
 
   return (
     <div className="min-h-screen" style={{
-      background: "linear-gradient(160deg, #070b18 0%, #0a0f1e 50%, #070b18 100%)",
+      background: "#f1f5f9",
       fontFamily: "'Pretendard', 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, sans-serif",
     }}>
       <style>{`
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
-        @keyframes pulse-glow { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
-        .tab-content { animation: fadeIn 0.35s ease-out; }
+        .tab-content { animation: fadeIn 0.3s ease-out; }
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 4px; }
         input[type=range] { height: 6px; border-radius: 6px; cursor: pointer; }
       `}</style>
 
       {/* Header */}
-      <header style={{ background: "rgba(7,11,24,0.95)", borderBottom: "1px solid rgba(255,255,255,0.06)", backdropFilter: "blur(20px)", position: "sticky", top: 0, zIndex: 100 }}>
+      <header style={{ background: "#ffffff", borderBottom: "1px solid rgba(0,0,0,0.08)", position: "sticky", top: 0, zIndex: 100, boxShadow: "0 1px 8px rgba(0,0,0,0.06)" }}>
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-              style={{ background: "linear-gradient(135deg,#6d28d9,#38bdf8)", boxShadow: "0 0 24px rgba(109,40,217,0.5)" }}>
+              style={{ background: "linear-gradient(135deg,#6d28d9,#38bdf8)", boxShadow: "0 4px 12px rgba(109,40,217,0.3)" }}>
               <Brain size={18} className="text-white" />
             </div>
             <div className="flex-1 min-w-0">
-              <h1 className="text-base font-black text-white tracking-tight">AI 기초 교육</h1>
-              <p className="text-xs text-slate-500">전력산업 종사자를 위한 인터랙티브 학습 가이드</p>
+              <h1 className="text-base font-black text-slate-800 tracking-tight">AI 기초 교육</h1>
+              <p className="text-xs text-slate-400">전력산업 종사자를 위한 인터랙티브 학습 가이드</p>
             </div>
             {completedTabs > 0 && (
               <div className="flex items-center gap-2 shrink-0">
                 <div className="text-right">
-                  <p className="text-[10px] text-slate-500 font-semibold">TOTAL XP</p>
-                  <p className="text-sm font-black text-white">{totalScore}<span className="text-slate-600 text-xs">/{totalMax}</span></p>
+                  <p className="text-[10px] text-slate-400 font-semibold">TOTAL XP</p>
+                  <p className="text-sm font-black text-slate-800">{totalScore}<span className="text-slate-400 text-xs">/{totalMax}</span></p>
                 </div>
                 <div className="w-8 h-8 rounded-full flex items-center justify-center"
-                  style={{ background: "rgba(251,191,36,0.15)", border: "1px solid rgba(251,191,36,0.3)" }}>
-                  <Star size={14} style={{ color: "#fbbf24" }} />
+                  style={{ background: "rgba(217,119,6,0.1)", border: "1px solid rgba(217,119,6,0.25)" }}>
+                  <Star size={14} style={{ color: "#d97706" }} />
                 </div>
               </div>
             )}
@@ -1725,7 +1724,7 @@ export default function App() {
           {/* Progress bar */}
           <div className="mt-3 flex gap-1">
             {tabs.map(tab => (
-              <div key={tab.id} className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+              <div key={tab.id} className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "#e2e8f0" }}>
                 <div className="h-full rounded-full transition-all duration-700"
                   style={{ width: scores[tab.id] ? "100%" : "0%", background: T[tab.id].grad }} />
               </div>
@@ -1735,7 +1734,7 @@ export default function App() {
       </header>
 
       {/* Tab Navigation */}
-      <nav style={{ background: "rgba(7,11,24,0.8)", borderBottom: "1px solid rgba(255,255,255,0.05)", backdropFilter: "blur(16px)" }}>
+      <nav style={{ background: "#ffffff", borderBottom: "1px solid rgba(0,0,0,0.07)" }}>
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex gap-1 py-2 overflow-x-auto">
             {tabs.map(tab => {
@@ -1748,15 +1747,16 @@ export default function App() {
                   className="shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 relative"
                   style={{
                     background: isActive ? th.dim : "transparent",
-                    color: isActive ? th.accent : "#475569",
+                    color: isActive ? th.accent : "#94a3b8",
                     border: `1px solid ${isActive ? th.border : "transparent"}`,
-                    boxShadow: isActive ? `0 0 20px ${th.glow}` : "none",
-                  }}>
+                  }}
+                  onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = "#f8fafc"; }}
+                  onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = "transparent"; }}>
                   <Icon size={15} />
                   <span className="hidden sm:inline">{tab.shortLabel}</span>
                   {done && (
                     <span className="w-1.5 h-1.5 rounded-full absolute top-2 right-2"
-                      style={{ background: th.accent, boxShadow: `0 0 6px ${th.glow}` }} />
+                      style={{ background: th.accent }} />
                   )}
                 </button>
               );
@@ -1773,14 +1773,14 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer style={{ borderTop: "1px solid rgba(255,255,255,0.05)", marginTop: "3rem" }}>
+      <footer style={{ borderTop: "1px solid rgba(0,0,0,0.07)", marginTop: "3rem", background: "#ffffff" }}>
         <div className="max-w-4xl mx-auto px-4 py-6 flex items-center justify-between">
-          <p className="text-xs text-slate-600">AI 기초 교육 · 전력산업 종사자 인터랙티브 학습</p>
+          <p className="text-xs text-slate-400">AI 기초 교육 · 전력산업 종사자 인터랙티브 학습</p>
           {completedTabs === tabs.length && (
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full"
-              style={{ background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.25)" }}>
-              <Trophy size={13} style={{ color: "#fbbf24" }} />
-              <span className="text-xs font-bold" style={{ color: "#fbbf24" }}>전 과정 완료!</span>
+              style={{ background: "rgba(217,119,6,0.08)", border: "1px solid rgba(217,119,6,0.2)" }}>
+              <Trophy size={13} style={{ color: "#d97706" }} />
+              <span className="text-xs font-bold" style={{ color: "#d97706" }}>전 과정 완료!</span>
             </div>
           )}
         </div>
